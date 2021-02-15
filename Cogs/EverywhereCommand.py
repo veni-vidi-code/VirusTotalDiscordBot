@@ -14,4 +14,4 @@ class Everywhere(commands.Cog, name="Available everywhere"):
                       brief="Gives you the Github link",
                       help="[This bot is a clone from a Github repository. Click here to open]()")
     async def github(self, ctx):
-        await ctx.send("[This bot is a clone from a Github repository. Click here to open]()")
+        await ctx.reply("[This bot is a clone from a Github repository. Click here to open]()")

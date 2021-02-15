@@ -23,15 +23,16 @@ class DomainListener(commands.Cog, name="Server Domain Listener"):
                 r'\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})'  # ...or ip
                 , re.IGNORECASE
             )
-            matches = re.findall(domainregex, msg.content)
+            matches = re.findall(domainregex, msg.content.replace("\n", "").replace("("," ").replace(")"," "))
             if len(matches) == 0:
                 pass
             else:
-                await msg.channel.send(
+                await msg.reply(
                     "🛑‼⚠️⚠️⚠️️WARNING⚠️⚠️⚠️‼️🛑\n Do never trust any links! Even if you think you know "
                     "the website is safe it might still contain special characters! "
                     "I will run a short test over it but cant ensure anything. \nNotice that i dont test files that "
-                    "would be downloaded via a link, im just testing the domain")
+                    "would be downloaded via a link, im just testing the domain. I will also test the url itself "
+                    "but that takes some time (around 15sec)")
                 for c in matches:
                     if c[len(c) - 1] == '/':
                         c = c[:len(c) - 1]
@@ -39,14 +40,15 @@ class DomainListener(commands.Cog, name="Server Domain Listener"):
 
             if len(msg.embeds) != 0 and msg.author.bot:
                 for e in msg.embeds:
-                    matches = re.findall(domainregex, pformat(e.to_dict()))
+                    matches = re.findall(domainregex, pformat(e.to_dict()).replace("\n", ""))
                     if len(matches) == 0:
                         pass
                     else:
-                        await msg.channel.send(
+                        await msg.reply(
                             "🛑‼⚠️⚠️⚠️️WARNING⚠️⚠️⚠️‼️🛑\n Do never trust any links! Even if you think you know "
                             "the website is safe it might still contain special characters! "
                             "I will run a short test over it but cant ensure anything.\n"
-                            "This is just about the domain, not the actual page")
+                            "This is just about the domain, not the actual page. I will also test the url itself "
+                            "but that takes some time (around 15sec)")
                         for c in matches:
-                            await msg.channel.send(embed=get_domain_embed(c, msg))
+                            await msg.reply(embed=get_domain_embed(c, msg))

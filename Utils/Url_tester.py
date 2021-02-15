@@ -21,18 +21,14 @@ vtotal = Virustotal(API_KEY=CONFIG['VirusTotalToken'], API_VERSION="v3")
 
 
 async def get_url_embed(url: str, ctx):
-    print(url)
     embed = discord.Embed(title="VirusTotalBot URL Check",
                           description="Information about " + url,
                           color=discord.Colour.red())
     embed.set_author(name=str(ctx.author))
     try:
         # See https://github.com/dbrennand/virustotal-python
-        print("check1")
         resp = vtotal.request("urls", data={"url": url}, method="POST")
-        print("check2")
         await sleep(12)  # This is supoptimal but seems to be necessary in order of ensuring that the url gets testet
-        print("check3")
         url_id = urlsafe_b64encode(url.encode()).decode().strip("=")
         analysis_resp = vtotal.request(f"urls/{url_id}")
         last_analysis_stats = ""
@@ -41,7 +37,6 @@ async def get_url_embed(url: str, ctx):
                 analysis_resp.data['attributes']['last_analysis_stats'][i])
 
         embed.add_field(name="Last Analysis stats", value=last_analysis_stats, inline=True)
-        embed.add_field(name="reputation score", value=str(analysis_resp.data['attributes']["reputation"]), inline=True)
         votes = ""
         for i in analysis_resp.data['attributes']['total_votes'].keys():
             votes = votes + "\n" + i + ": " + str(analysis_resp.data['attributes']['total_votes'][i])

@@ -25,26 +25,31 @@ class UrlListener(commands.Cog, name="Server URL Listener"):
                         r'\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})' # ...or ip
                         r'(?::\d+)?' # optional port
                         r'(?:/?|[/?]\S+)$', re.IGNORECASE)
-            matches = re.findall(urlregex, msg.content)
+
+            matches = re.findall(urlregex, msg.content.replace("\n", ""))
             if len(matches) == 0:
                 pass
             else:
                 for c in matches:
                     if c[len(c) - 1] == '/':
                         c = c[:len(c) - 1]
-                    await msg.channel.send(embed=await get_url_embed(c, msg))
+                    await msg.reply(embed=await get_url_embed(c, msg))
 
             if len(msg.embeds) != 0 and msg.author.bot:
-                print("check")
                 for e in msg.embeds:
                     from pprint import pprint
-                    pprint(e.to_dict())
-                    matches = re.findall(urlregex, pformat(e.to_dict()))
-                    if len(matches) == 0:
-                        print("0")
-                        pass
-                    else:
+                    urlregex = re.compile(
+                        r'^(?:http|ftp)s?://'  # http:// or https://
+                        r'(?:(?:[A-Z0-9](?:[A-Z0-9-]{0,61}[A-Z0-9])?\.)+(?:[A-Z]{2,6}\.?|[A-Z0-9-]{2,}\.?)|'  # domain...
+                        r'\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})'  # ...or ip
+                        r'(?::\d+)?'  # optional port
+                        r'(?:/?|[/?]\S+)$', re.IGNORECASE)
+                    matches = []
+                    for i in pformat(e.to_dict()).replace("]", "").replace("\'", "").replace("(", " ").replace(")", " ").replace("[", "").split(" "):
+                        matches += re.findall(urlregex, i)
+                    if len(matches) != 0:
                         for c in matches:
                             if c[len(c) - 1] == '/':
                                 c = c[:len(c) - 1]
-                            await msg.channel.send(embed=await get_url_embed(c, msg))
+                            await msg.reply(embed=await get_url_embed(c, msg))
+                        await msg.reply("Finished all tests")
