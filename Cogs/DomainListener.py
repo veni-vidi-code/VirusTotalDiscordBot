@@ -18,12 +18,12 @@ class DomainListener(commands.Cog, name="Server Domain Listener"):
         elif str(msg.channel.type) != "private":
             # Note: I am unsure if this covers all what Discord sees as a link.
             # I tested a bit and it seems to be working but i am just gessing
-            urlregex = re.compile(
+            domainregex = re.compile(
                 r'(?:(?:[A-Z0-9](?:[A-Z0-9-]{0,61}[A-Z0-9])?\.)+(?:[A-Z]{2,6}\.?|[A-Z0-9-]{2,}\.?)|'  # domain...
                 r'\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})'  # ...or ip
                 , re.IGNORECASE
             )
-            matches = re.findall(urlregex, msg.content)
+            matches = re.findall(domainregex, msg.content)
             if len(matches) == 0:
                 pass
             else:
@@ -37,14 +37,9 @@ class DomainListener(commands.Cog, name="Server Domain Listener"):
                         c = c[:len(c) - 1]
                     await msg.channel.send(embed=get_domain_embed(c, msg))
 
-            if len(msg.embeds) != 0:
+            if len(msg.embeds) != 0 and msg.author.bot:
                 for e in msg.embeds:
-                    urlregex = re.compile(
-                        r'(?:(?:[A-Z0-9](?:[A-Z0-9-]{0,61}[A-Z0-9])?\.)+(?:[A-Z]{2,6}\.?|[A-Z0-9-]{2,}\.?)|'  # domain...
-                        r'\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})'  # ...or ip
-                        , re.IGNORECASE
-                    )
-                    matches = re.findall(urlregex, pformat(e.to_dict()))
+                    matches = re.findall(domainregex, pformat(e.to_dict()))
                     if len(matches) == 0:
                         pass
                     else:
@@ -54,6 +49,4 @@ class DomainListener(commands.Cog, name="Server Domain Listener"):
                             "I will run a short test over it but cant ensure anything.\n"
                             "This is just about the domain, not the actual page")
                         for c in matches:
-                            if c[len(c) - 1] == '/':
-                                c = c[:len(c) - 1]
                             await msg.channel.send(embed=get_domain_embed(c, msg))
