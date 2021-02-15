@@ -15,7 +15,7 @@ from discord.ext import commands
 from Cogs.DmCommands import DmCommands
 from Cogs.EverywhereCommand import Everywhere
 from Cogs.ServerCommands import ServerCommands
-from Cogs.Urllistener import URLListener
+from Cogs.DomainListener import DomainListener
 
 print("Loading up bot unit...")
 try:
@@ -35,7 +35,7 @@ bot = discord.ext.commands.Bot(commands.when_mentioned_or(CONFIG['Prefix']), cas
 bot.add_cog(ServerCommands(bot))
 bot.add_cog(Everywhere(bot))
 bot.add_cog(DmCommands(bot))
-bot.add_cog(URLListener(bot))
+bot.add_cog(DomainListener(bot))
 
 print("""Finished adding cogs. Bot starts now
 *********************************************

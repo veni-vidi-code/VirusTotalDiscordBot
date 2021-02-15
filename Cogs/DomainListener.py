@@ -3,13 +3,13 @@ from pprint import pformat
 
 from discord.ext import commands
 
-from Utils.url_tester import get_url_embed
+from Utils.domain_tester import get_domain_embed
 
 
-class URLListener(commands.Cog, name="Server Listener"):
+class DomainListener(commands.Cog, name="Server Domain Listener"):
     def __init__(self, b):
         self.b = b
-        print("URL Listener sucessfully added to bot!")
+        print("Domain Listener sucessfully added to bot!")
 
     @commands.Cog.listener()
     async def on_message(self, msg):
@@ -30,11 +30,12 @@ class URLListener(commands.Cog, name="Server Listener"):
                 await msg.channel.send(
                     "🛑‼⚠️⚠️⚠️️WARNING⚠️⚠️⚠️‼️🛑\n Do never trust any links! Even if you think you know "
                     "the website is safe it might still contain special characters! "
-                    "I will run a short test over it but cant ensure anything.")
+                    "I will run a short test over it but cant ensure anything. \nNotice that i dont test files that "
+                    "would be downloaded via a link, im just testing the domain")
                 for c in matches:
                     if c[len(c) - 1] == '/':
                         c = c[:len(c) - 1]
-                    await msg.channel.send(embed=get_url_embed(c, msg))
+                    await msg.channel.send(embed=get_domain_embed(c, msg))
 
             if len(msg.embeds) != 0:
                 for e in msg.embeds:
@@ -50,8 +51,9 @@ class URLListener(commands.Cog, name="Server Listener"):
                         await msg.channel.send(
                             "🛑‼⚠️⚠️⚠️️WARNING⚠️⚠️⚠️‼️🛑\n Do never trust any links! Even if you think you know "
                             "the website is safe it might still contain special characters! "
-                            "I will run a short test over it but cant ensure anything.")
+                            "I will run a short test over it but cant ensure anything.\n"
+                            "This is just about the domain, not the actual page")
                         for c in matches:
                             if c[len(c) - 1] == '/':
                                 c = c[:len(c) - 1]
-                            await msg.channel.send(embed=get_url_embed(c, msg))
+                            await msg.channel.send(embed=get_domain_embed(c, msg))

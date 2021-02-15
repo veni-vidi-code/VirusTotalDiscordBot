@@ -3,7 +3,7 @@ import json
 import discord
 from virustotal_python import Virustotal, virustotal
 
-print("starting up url tester unit")
+print("starting up domain tester unit")
 try:
     with open("Config.json", "r") as f:
         CONFIG = json.load(f)
@@ -13,14 +13,14 @@ except FileNotFoundError:
                    'YourDiscordId': '0', 'Prefix': '&'}, f)
     raise Exception("Missing Config.json. I added it, please fill it out yourself! (Intended at first excecution)")
 
-print("url tester loaded with key " + CONFIG['VirusTotalToken'])
+print("domain tester unit loaded with key " + CONFIG['VirusTotalToken'])
 vtotal = Virustotal(API_KEY=CONFIG['VirusTotalToken'], API_VERSION="v3")
 
 
-def get_url_embed(url: str, ctx):
+def get_domain_embed(url: str, ctx):
     try:
         resp = vtotal.request(f"domains/{url}")
-        embed = discord.Embed(title="VirusTotalBot Url Check",
+        embed = discord.Embed(title="VirusTotalBot Domain Check",
                               description="Information about " + url,
                               color=discord.Colour.red())
         embed.set_author(name=str(ctx.author))
@@ -40,7 +40,7 @@ def get_url_embed(url: str, ctx):
         embed = discord.Embed(title="VirusTotalBot Url Check",
                               description="Information about " + url,
                               color=discord.Colour.red())
-        embed.add_field(name="Results", value="Something went wrong, most commonly is that it is not an working url")
+        embed.add_field(name="Results", value="Something went wrong, most commonly is that it is not an working domain")
 
     finally:
         return embed

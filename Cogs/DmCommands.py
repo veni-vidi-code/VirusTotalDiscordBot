@@ -1,7 +1,7 @@
 from discord import Forbidden
 from discord.ext import commands
 
-from Utils.url_tester import get_url_embed
+from Utils.domain_tester import get_domain_embed
 
 
 class DmCommands(commands.Cog, name="Dm Commands"):
@@ -29,4 +29,4 @@ class DmCommands(commands.Cog, name="Dm Commands"):
             await ctx.send("Missing an url or file")
             return
         domain = arg[0]
-        await ctx.send(embed=get_url_embed(domain, ctx))
+        await ctx.send(embed=get_domain_embed(domain, ctx))
