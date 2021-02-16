@@ -1,7 +1,10 @@
+from asyncio import sleep
+
 from discord import Forbidden
 from discord.ext import commands
 
 from Utils.domain_tester import get_domain_embed
+from Utils.file_tester import get_file_embed
 
 
 class DmCommands(commands.Cog, name="Dm Commands"):
@@ -23,10 +26,17 @@ class DmCommands(commands.Cog, name="Dm Commands"):
                 await ctx.author.send("Only DM Available")
             except Forbidden:
                 await ctx.reply("Only DM Available! Warning! The Above message might be milicious. "
-                               "Dont click the file/url until you trust it! (for some reason i cant delete it)")
+                                "Dont click the file/url until you trust it! (for some reason i cant delete it)")
             return
-        if arg is None:
+        if arg is None and not ctx.message.attachments:
             await ctx.send("Missing an url")
             return
-        domain = arg[0]
-        await ctx.reply(embed=get_domain_embed(domain, ctx))
+        if ctx.message.attachments:
+            await ctx.reply("Starting testing of files. This takes some time")
+            for i in ctx.message.attachments:
+                msgn = await ctx.reply("Stand by...")
+                await msgn.edit(content=None, embed=await get_file_embed(i, ctx))
+                await sleep(30)
+        if len(arg) > 0:
+            domain = arg[0]
+            await ctx.reply(embed=get_domain_embed(domain, ctx))
