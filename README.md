@@ -4,3 +4,7 @@ Simple Discord Bot that scans messages in Servers for urls and files and checks 
 *** So far it is just capable of scanning links in normal messages (no embeds) ***
 
 It is still in alpha and im working on it
+
+So far: 
+URL Testing
+File testing only via command
