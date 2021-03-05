@@ -19,12 +19,12 @@ class UrlListener(commands.Cog, name="Server URL Listener"):
             # Note: I am unsure if this covers all what Discord sees as a link.
             # I tested a bit and it seems to be working but i am just gessing
             urlregex = re.compile(
-                        r'^(?:http|ftp)s?://' # http:// or https://
-                        r'(?:(?:[A-Z0-9](?:[A-Z0-9-]{0,61}[A-Z0-9])?\.)+(?:[A-Z]{2,6}\.?|[A-Z0-9-]{2,}\.?)|' #domain...
-                        r'localhost|' #localhost...
-                        r'\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})' # ...or ip
-                        r'(?::\d+)?' # optional port
-                        r'(?:/?|[/?]\S+)$', re.IGNORECASE)
+                r'^(?:http|ftp)s?://'  # http:// or https://
+                r'(?:(?:[A-Z0-9](?:[A-Z0-9-]{0,61}[A-Z0-9])?\.)+(?:[A-Z]{2,6}\.?|[A-Z0-9-]{2,}\.?)|'  # domain...
+                r'localhost|'  # localhost...
+                r'\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})'  # ...or ip
+                r'(?::\d+)?'  # optional port
+                r'(?:/?|[/?]\S+)$', re.IGNORECASE)
 
             matches = re.findall(urlregex, msg.content.replace("\n", ""))
             if len(matches) == 0:
@@ -37,7 +37,6 @@ class UrlListener(commands.Cog, name="Server URL Listener"):
 
             if len(msg.embeds) != 0 and msg.author.bot:
                 for e in msg.embeds:
-                    from pprint import pprint
                     urlregex = re.compile(
                         r'^(?:http|ftp)s?://'  # http:// or https://
                         r'(?:(?:[A-Z0-9](?:[A-Z0-9-]{0,61}[A-Z0-9])?\.)+(?:[A-Z]{2,6}\.?|[A-Z0-9-]{2,}\.?)|'  # domain...
@@ -45,7 +44,9 @@ class UrlListener(commands.Cog, name="Server URL Listener"):
                         r'(?::\d+)?'  # optional port
                         r'(?:/?|[/?]\S+)$', re.IGNORECASE)
                     matches = []
-                    for i in pformat(e.to_dict()).replace("]", "").replace("\'", "").replace("(", " ").replace(")", " ").replace("[", "").split(" "):
+                    for i in pformat(e.to_dict()).replace("]", "").replace("\'", "").replace("(", " ").replace(")",
+                                                                                                               " ").replace(
+                            "[", "").split(" "):
                         matches += re.findall(urlregex, i)
                     if len(matches) != 0:
                         for c in matches:
