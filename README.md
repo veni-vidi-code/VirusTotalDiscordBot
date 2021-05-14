@@ -12,5 +12,7 @@ If you want to use it i suggest running it in a docker container
 
 
 On first loading it will throw an error after creating a config.json file, fill it with you discord bot token and your VirusTotal Api Token, then reload the bot
+There is a different file names settings.py(Cogs/settings.py) where you can disable checks on other bots
+or specific file types
 
 Now the bot should send warnings on servers where urls, files and domains get posted and should test them
