@@ -23,4 +23,4 @@ class Everywhere(commands.Cog, name="Available everywhere"):
 
     @commands.command(name="info")
     async def info(self, ctx):
-        ctx.reply(embed=helpembed)
+        await ctx.reply(embed=helpembed)
