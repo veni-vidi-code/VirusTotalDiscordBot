@@ -4,20 +4,22 @@ from pprint import pformat
 import discord
 from discord.ext import commands
 
+from Cogs import settings
 from Utils.Url_tester import get_url_embed
 
 
 class UrlListener(commands.Cog, name="Server URL Listener"):
-    def __init__(self, b:commands.bot):
+    def __init__(self, b: commands.bot):
         self.b = b
         print("Url Change Listener sucessfully added to bot!")
 
     @commands.Cog.listener()
     async def on_raw_message_edit(self, rawdata: discord.RawMessageUpdateEvent):
-
         channel = await self.b.fetch_channel(rawdata.channel_id)
         msg = await channel.fetch_message(rawdata.message_id)
         if msg.author.id == self.b.user.id:
+            pass
+        elif (not settings.bottest) and msg.author.bot:
             pass
         elif str(msg.channel.type) != "private":
             # Note: I am unsure if this covers all what Discord sees as a link.

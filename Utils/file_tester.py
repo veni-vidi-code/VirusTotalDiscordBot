@@ -1,9 +1,10 @@
 import json
 from asyncio import sleep
-from pprint import pprint
 
 import discord
 from virustotal_python import Virustotal
+
+import Cogs.settings as settings
 
 print("starting up url tester unit")
 try:
@@ -32,7 +33,7 @@ async def get_file_embed(attachment: discord.Attachment, ctx):
     files = {"file": (attachment.filename, r, "rb")}
     embed = discord.Embed(title="VirusTotalBot File Check",
                           description="Information about " + attachment.filename,
-                          color=discord.Colour.red())
+                          color=discord.Colour.green())
     embed.set_author(name=str(ctx.author))
 
     resp = vtotal.request("file/scan", files=files, method="POST")
@@ -47,7 +48,8 @@ async def get_file_embed(attachment: discord.Attachment, ctx):
     embed.add_field(name="SHA256 Checksum", value=resp['sha256'], inline=True)
     embed.add_field(name="Total Amount of checks", value=resp['total'], inline=True)
     embed.add_field(name="positive checks",
-                    value="Amount of Viruscheckers that detect a potential virus: " + str(resp['positives']), inline=True)
+                    value="Amount of Viruscheckers that detect a potential virus: " + str(resp['positives']),
+                    inline=True)
     pchecks = ""
     if resp['positives'] != 0:
         for i in resp['scans'].keys():
@@ -56,5 +58,9 @@ async def get_file_embed(attachment: discord.Attachment, ctx):
             elif resp['scans'][i]['detected']:
                 pchecks += str(i) + " detected\n"
         embed.add_field(name="by Sites", value=pchecks, inline=True)
+    if resp['positives'] >= settings.checkorange:
+        embed.color = discord.Colour.orange()
+    if resp['positives'] >= settings.checkred:
+        embed.color = discord.Colour.red()
 
     return embed

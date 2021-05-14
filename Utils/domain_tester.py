@@ -3,6 +3,8 @@ import json
 import discord
 from virustotal_python import Virustotal, virustotal
 
+from Cogs import settings
+
 print("starting up domain tester unit")
 try:
     with open("Config.json", "r") as f:
@@ -22,7 +24,7 @@ def get_domain_embed(url: str, ctx):
         resp = vtotal.request(f"domains/{url}")
         embed = discord.Embed(title="VirusTotalBot Domain Check",
                               description="Information about " + url,
-                              color=discord.Colour.red())
+                              color=discord.Colour.green())
         embed.set_author(name=str(ctx.author))
         last_analysis_stats = ""
         for i in resp.data['attributes']['last_analysis_stats'].keys():
@@ -34,6 +36,12 @@ def get_domain_embed(url: str, ctx):
         for i in resp.data['attributes']['total_votes'].keys():
             votes = votes + "\n" + i + ": " + str(resp.data['attributes']['total_votes'][i])
         embed.add_field(name="votes", value=votes, inline=True)
+        if resp.data['attributes']['last_analysis_stats']['malicious'] + resp.data['attributes']['last_analysis_stats'][
+            'suspicious'] >= settings.checkorange:
+            embed.color = discord.Colour.orange()
+        if resp.data['attributes']['last_analysis_stats']['malicious'] + resp.data['attributes']['last_analysis_stats'][
+            'suspicious'] >= settings.checkred:
+            embed.color = discord.Colour.red()
     except virustotal.VirustotalError:
         print("An Error occured trying to handle " + url)
 

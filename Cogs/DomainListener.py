@@ -3,6 +3,7 @@ from pprint import pformat
 
 from discord.ext import commands
 
+from Cogs import settings
 from Utils.domain_tester import get_domain_embed
 
 
@@ -14,6 +15,8 @@ class DomainListener(commands.Cog, name="Server Domain Listener"):
     @commands.Cog.listener()
     async def on_message(self, msg):
         if msg.author.id == self.b.user.id:
+            pass
+        elif (not settings.bottest) and msg.author.bot:
             pass
         elif str(msg.channel.type) != "private":
             # Note: I am unsure if this covers all what Discord sees as a link.
