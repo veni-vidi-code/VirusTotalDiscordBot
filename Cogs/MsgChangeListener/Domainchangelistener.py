@@ -1,6 +1,6 @@
 import re
 from pprint import pformat
-
+import Cogs.settings as settings
 import discord
 from discord.ext import commands
 
@@ -14,10 +14,11 @@ class DomainListener(commands.Cog, name="Server Domain Listener"):
 
     @commands.Cog.listener()
     async def on_raw_message_edit(self, rawdata: discord.RawMessageUpdateEvent):
-
         channel = await self.b.fetch_channel(rawdata.channel_id)
         msg = await channel.fetch_message(rawdata.message_id)
         if msg.author.id == self.b.user.id:
+            pass
+        elif (not settings.bottest) and msg.author.bot:
             pass
         elif str(msg.channel.type) != "private":
             # Note: I am unsure if this covers all what Discord sees as a link.

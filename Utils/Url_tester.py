@@ -6,6 +6,8 @@ from pprint import pformat
 import discord
 from virustotal_python import Virustotal, virustotal
 
+from Cogs import settings
+
 print("starting up url tester unit")
 try:
     with open("Config.json", "r") as f:
@@ -23,7 +25,7 @@ vtotal = Virustotal(API_KEY=CONFIG['VirusTotalToken'], API_VERSION="v3")
 async def get_url_embed(url: str, ctx):
     embed = discord.Embed(title="VirusTotalBot URL Check",
                           description="Information about " + url,
-                          color=discord.Colour.red())
+                          color=discord.Colour.green())
     embed.set_author(name=str(ctx.author))
     try:
         # See https://github.com/dbrennand/virustotal-python
@@ -43,7 +45,14 @@ async def get_url_embed(url: str, ctx):
         embed.add_field(name="votes", value=votes, inline=True)
         embed.add_field(name="Times submitted", value=str(analysis_resp.data['attributes']['times_submitted']))
         embed.add_field(name="trackers", value=pformat(analysis_resp.data['attributes']['trackers']))
-
+        if analysis_resp.data['attributes']['last_analysis_stats']['malicious'] + \
+                analysis_resp.data['attributes']['last_analysis_stats'][
+                    'suspicious'] >= settings.checkyellow:
+            embed.color = discord.Colour.orange()
+        if analysis_resp.data['attributes']['last_analysis_stats']['malicious'] + \
+                analysis_resp.data['attributes']['last_analysis_stats'][
+                    'suspicious'] >= settings.checkred:
+            embed.color = discord.Colour.red()
     except virustotal.VirustotalError:
         print("An Error occured trying to handle " + url)
         embed = discord.Embed(title="VirusTotalBot Url Check",
