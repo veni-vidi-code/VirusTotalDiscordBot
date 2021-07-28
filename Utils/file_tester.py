@@ -6,7 +6,7 @@ from virustotal_python import Virustotal
 
 import Cogs.settings as settings
 
-print("starting up url tester unit")
+print("starting up file tester unit")
 try:
     with open("Config.json", "r") as f:
         CONFIG = json.load(f)
@@ -16,7 +16,7 @@ except FileNotFoundError:
                    'YourDiscordId': '0', 'Prefix': '&'}, f)
     raise Exception("Missing Config.json. I added it, please fill it out yourself! (Intended at first excecution)")
 
-print("url tester loaded with key " + CONFIG['VirusTotalToken'])
+print("file tester loaded with key " + CONFIG['VirusTotalToken'])
 vtotal = Virustotal(API_KEY=CONFIG['VirusTotalToken'], API_VERSION="v2")
 
 
