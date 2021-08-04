@@ -47,7 +47,7 @@ async def get_url_embed(url: str, ctx):
         embed.add_field(name="trackers", value=pformat(analysis_resp.data['attributes']['trackers']))
         if analysis_resp.data['attributes']['last_analysis_stats']['malicious'] + \
                 analysis_resp.data['attributes']['last_analysis_stats'][
-                    'suspicious'] >= settings.checkyellow:
+                    'suspicious'] >= settings.checkorange:
             embed.color = discord.Colour.orange()
         if analysis_resp.data['attributes']['last_analysis_stats']['malicious'] + \
                 analysis_resp.data['attributes']['last_analysis_stats'][
