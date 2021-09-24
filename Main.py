@@ -1,6 +1,6 @@
 print("""
 *********************************************
-Virus Total Bot by The-Bow-Hunter
+Virus Total Bot by Tom Mucke
 *********************************************
 
 
@@ -53,7 +53,7 @@ for i in [ServerCommands(bot), Everywhere(bot), DomainListener(bot), UrlListener
 
 print("""Finished adding cogs. Bot starts now
 *********************************************
-Virus Total Bot by The-Bow-Hunter
+Virus Total Bot by Tom Mucke
 *********************************************
 """)
 bot.run(CONFIG['Discord_Bot_Token'])
